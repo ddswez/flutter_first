@@ -4,30 +4,14 @@ import 'constants.dart' show Constants, AppColors;
 enum ActionItems { GROUP_CHAT, QR_SACN, ADD_FRIEND, PAYMENT, HELP }
 
 class NavigationIconView {
-  final String _title;
-  final IconData _icon;
-  final IconData _activeIcon;
   final BottomNavigationBarItem item;
 
   NavigationIconView(
       {Key key, String title, IconData icon, IconData activeIcon})
-      : _title = title,
-        _icon = icon,
-        _activeIcon = activeIcon,
-        item = new BottomNavigationBarItem(
-            icon: Icon(
-              icon,
-              color: Color(AppColors.TabIconNormal),
-            ),
-            activeIcon: Icon(
-              activeIcon,
-              color: Color(AppColors.TabIconActive),
-            ),
-            title: Text(
-              title,
-              style: TextStyle(
-                  fontSize: 14.0, color: Color(AppColors.TabIconNormal)),
-            ),
+      : item = new BottomNavigationBarItem(
+            icon: Icon(icon),
+            activeIcon: Icon(activeIcon),
+            title: Text(title),
             backgroundColor: Colors.white);
 }
 
@@ -37,7 +21,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  PageController _pageController;
   List<NavigationIconView> _navigationViews;
+  int _currentIndex = 0;
+  List<Widget> _pages;
 
   @override
   void initState() {
@@ -59,6 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
           title: '我',
           icon: IconData(0xe758, fontFamily: Constants.IconFontFamily),
           activeIcon: IconData(0xe607, fontFamily: Constants.IconFontFamily)),
+    ];
+    _pageController = PageController(initialPage: _currentIndex);
+
+    _pages = [
+      Container(
+        color: Colors.blue,
+      ),
+      Container(
+        color: Colors.orange,
+      ),
+      Container(
+        color: Colors.white,
+      ),
+      Container(
+        color: Colors.red,
+      ),
     ];
   }
 
@@ -82,19 +85,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final BottomNavigationBar _bottomBar = BottomNavigationBar(
+      fixedColor: const Color(AppColors.TabIconActive),
+      selectedFontSize: 12.0,
       items: _navigationViews
           .map((NavigationIconView navigationIconView) =>
               navigationIconView.item)
           .toList(),
-      currentIndex: 0,
+      currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: (int index) {
-        print('点击的是第$index个');
+        setState(() {
+          _currentIndex = index;
+
+          _pageController.animateToPage(_currentIndex,
+              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        });
       },
     );
     return Scaffold(
       appBar: AppBar(
         title: Text("微信"),
+        elevation: 0,
         actions: <Widget>[
           Container(
             padding: const EdgeInsets.only(right: 8.0),
@@ -141,8 +152,17 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Container(
-        color: Colors.red,
+      body: PageView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return _pages[index];
+        },
+        itemCount: _pages.length,
+        controller: _pageController,
+        onPageChanged: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
       bottomNavigationBar: _bottomBar,
     );
