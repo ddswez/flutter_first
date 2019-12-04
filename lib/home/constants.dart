@@ -113,6 +113,7 @@ class Constants {
   static const IndexLetterBoxRadius = 4.0;
   static const FullWidthIconButtonIconSize = 25.0;
   static const ChatBoxHeight = 48.0;
+  static const UnreadMsgNotifyDotSize = 20.0;
 
   static const String MENU_MARK_AS_UNREAD = 'MENU_MARK_AS_UNREAD';
   static const String MENU_MARK_AS_UNREAD_VALUE = '标为未读';
