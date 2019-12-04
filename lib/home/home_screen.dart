@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'constants.dart' show Constants;
+import 'constants.dart' show Constants, AppColors;
+
+enum ActionItems { GROUP_CHAT, QR_SACN, ADD_FRIEND, PAYMENT, HELP }
 
 class NavigationIconView {
   final String _title;
@@ -13,9 +15,19 @@ class NavigationIconView {
         _icon = icon,
         _activeIcon = activeIcon,
         item = new BottomNavigationBarItem(
-            icon: Icon(icon),
-            activeIcon: Icon(activeIcon),
-            title: Text(title),
+            icon: Icon(
+              icon,
+              color: Color(AppColors.TabIconNormal),
+            ),
+            activeIcon: Icon(
+              activeIcon,
+              color: Color(AppColors.TabIconActive),
+            ),
+            title: Text(
+              title,
+              style: TextStyle(
+                  fontSize: 14.0, color: Color(AppColors.TabIconNormal)),
+            ),
             backgroundColor: Colors.white);
 }
 
@@ -33,11 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _navigationViews = [
       NavigationIconView(
           title: '微信',
-          icon: IconData(
-              0xe615,
-              fontFamily: Constants.IconFontFamily),
-          activeIcon: IconData(0xe62f,
-              fontFamily: Constants.IconFontFamily)),
+          icon: IconData(0xe615, fontFamily: Constants.IconFontFamily),
+          activeIcon: IconData(0xe62f, fontFamily: Constants.IconFontFamily)),
       NavigationIconView(
           title: '通讯录',
           icon: IconData(0xe63a, fontFamily: Constants.IconFontFamily),
@@ -51,6 +60,23 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: IconData(0xe758, fontFamily: Constants.IconFontFamily),
           activeIcon: IconData(0xe607, fontFamily: Constants.IconFontFamily)),
     ];
+  }
+
+  _buildPopupMenuItem(int iconName, String title) {
+    return Row(
+      children: <Widget>[
+        Icon(
+          IconData(iconName, fontFamily: Constants.IconFontFamily),
+          size: 22.0,
+          color: const Color(AppColors.AppBarPopupMenuColor),
+        ),
+        Container(width: 12.0),
+        Text(
+          title,
+          style: TextStyle(color: const Color(AppColors.AppBarPopupMenuColor)),
+        )
+      ],
+    );
   }
 
   @override
@@ -70,17 +96,48 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text("微信"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              print('on click search');
+          Container(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                print('on click search');
+              },
+            ),
+          ),
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuItem<ActionItems>>[
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe62f, '发起群聊'),
+                  value: ActionItems.GROUP_CHAT,
+                ),
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe61d, '添加朋友'),
+                  value: ActionItems.ADD_FRIEND,
+                ),
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe613, '扫一扫'),
+                  value: ActionItems.QR_SACN,
+                ),
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe64d, '收付款'),
+                  value: ActionItems.PAYMENT,
+                ),
+                PopupMenuItem(
+                  child: _buildPopupMenuItem(0xe6b3, '帮助与反馈'),
+                  value: ActionItems.HELP,
+                ),
+              ];
+            },
+            icon: Icon(Icons.add),
+            onSelected: (ActionItems selected) {
+              print('on click is $selected');
             },
           ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              print('on click add');
-            },
+          // 右边距
+          Container(
+            width: 16.0,
           )
         ],
       ),

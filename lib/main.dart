@@ -5,7 +5,8 @@ import './home/constants.dart' show AppColors;
 void main() => runApp(MaterialApp(
   title: 'wechat',
   theme: ThemeData.light().copyWith(
-    primaryColor: Color(AppColors.AppBarColor)
+    primaryColor: Color(AppColors.AppBarColor),
+    cardColor: Color(AppColors.AppBarColor),
   ),
   home: HomeScreen(),
 )); //2
