@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../home/constants.dart' show AppColors;
 
+enum Device { MAC, WIN }
+
 class Conversation {
   const Conversation(
       {@required this.avatar,
@@ -35,6 +37,15 @@ class Conversation {
 
 
 class ConversationPageData {
+
+  ConversationPageData({this.device, this.conversations});
+
+  final Device device;
+  final List<Conversation> conversations;
+
+  static mock() {
+    return ConversationPageData(device: Device.MAC, conversations: mockConversations);
+  }
 
   static List<Conversation> mockConversations = [
     const Conversation(
@@ -138,3 +149,5 @@ class ConversationPageData {
     ),
   ];
 }
+
+

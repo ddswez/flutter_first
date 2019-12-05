@@ -83,7 +83,8 @@ class _ConversationItem extends StatelessWidget {
         children: <Widget>[
           avatarContainer,
           Container(width: 10.0),
-          Expanded(child: Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(conversation.title, style: AppStyles.TitleStyle),
@@ -103,17 +104,72 @@ class ConversationPage extends StatefulWidget {
   _ConversationPageState createState() => _ConversationPageState();
 }
 
-class _ConversationPageState extends State<ConversationPage> {
+class _DeviceInfoItem extends StatelessWidget {
+  const _DeviceInfoItem({this.deviece}) : assert(deviece != null);
+
+  final Device deviece;
+
+  int get iconName {
+    return deviece == Device.MAC ? 0xe640 : 0xe668;
+  }
+
+  String get deviceName {
+    return deviece == Device.MAC ? "Mac" : "Windows";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return _ConversationItem(
-              conversation: ConversationPageData.mockConversations[index]);
-        },
-        itemCount: ConversationPageData.mockConversations.length,
+      padding:
+          EdgeInsets.only(left: 24.0, top: 10.0, bottom: 10.0, right: 24.0),
+      decoration: BoxDecoration(
+          color: Color(AppColors.DeviceInfoItemBg),
+          border: Border(
+              bottom: BorderSide(
+                  color: Color(AppColors.DividerColor),
+                  width: Constants.DividerWidth))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            IconData(iconName, fontFamily: Constants.IconFontFamily),
+            size: 24.0,
+            color: Color(AppColors.DeviceInfoItemIcon),
+          ),
+          SizedBox(width: 16.0),
+          Text(
+            '$deviceName 微信已登录, 手机通知已关闭',
+            style: AppStyles.DeviceInfoItemTextStyle,
+          )
+        ],
       ),
+    );
+  }
+}
+
+class _ConversationPageState extends State<ConversationPage> {
+
+  final ConversationPageData data = ConversationPageData.mock();
+
+  @override
+  Widget build(BuildContext context) {
+    var mockConversations = data.conversations;
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        if (data.device != null) {
+          if (index == 0) {
+            return _DeviceInfoItem(deviece: data.device);
+          }
+          return _ConversationItem(
+              conversation: mockConversations[index -1]);
+        } else {
+          return _ConversationItem(
+              conversation: mockConversations[index]);
+        }
+
+      },
+      itemCount: data.device != null ? mockConversations.length + 1 : mockConversations.length,
     );
   }
 }
