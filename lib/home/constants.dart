@@ -108,7 +108,7 @@ class Constants {
   static const TitleTextSize = 16.0;
   static const ContentTextSize = 20.0;
   static const DesTextSize = 13.0;
-  static const IndexBarWidth = 24.0;
+  static const IndexBarWidth = 32.0;
   static const IndexLetterBoxSize = 114.0;
   static const IndexLetterBoxRadius = 4.0;
   static const FullWidthIconButtonIconSize = 25.0;

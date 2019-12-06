@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'constants.dart' show Constants, AppColors;
 import 'conversation_page.dart';
 import 'contacts_page.dart';
+import 'discover_page.dart';
+import 'package:flutter/services.dart';
 
 enum ActionItems { GROUP_CHAT, QR_SACN, ADD_FRIEND, PAYMENT, HELP }
 
@@ -54,9 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _pages = [
       ConversationPage(),
       ContactsPage(),
-      Container(
-        color: Colors.white,
-      ),
+      DiscoverPage(),
       Container(
         color: Colors.red,
       ),
@@ -82,6 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.transparent
+    ));
     final BottomNavigationBar _bottomBar = BottomNavigationBar(
       fixedColor: const Color(AppColors.TabIconActive),
       selectedFontSize: 12.0,
