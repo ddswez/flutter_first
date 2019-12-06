@@ -6,7 +6,7 @@ void main() => runApp(MaterialApp(
   title: 'wechat',
   theme: ThemeData.light().copyWith(
     primaryColor: Color(AppColors.AppBarColor),
-    cardColor: Color(AppColors.AppBarColor),
+    cardColor: Color(AppColors.CardBgColor),
   ),
   home: HomeScreen(),
 )); //2

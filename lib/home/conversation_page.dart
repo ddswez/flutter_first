@@ -8,6 +8,34 @@ class _ConversationItem extends StatelessWidget {
   final Conversation conversation;
   var tapPos;
 
+  _showMenu(BuildContext context, Offset tapPos) {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+    final RelativeRect position = RelativeRect.fromLTRB(tapPos.dx, tapPos.dy,
+        overlay.size.width - tapPos.dx, overlay.size.height - tapPos.dy);
+    showMenu<String>(
+        context: context,
+        position: position,
+        items: <PopupMenuItem<String>>[
+          PopupMenuItem(
+            child: Text(Constants.MENU_MARK_AS_UNREAD_VALUE),
+            value: Constants.MENU_MARK_AS_UNREAD,
+          ),
+          PopupMenuItem(
+            child: Text(Constants.MENU_PIN_TO_TOP_VALUE),
+            value: Constants.MENU_PIN_TO_TOP,
+          ),
+          PopupMenuItem(
+            child: Text(Constants.MENU_DELETE_CONVERSATION_VALUE),
+            value: Constants.MENU_DELETE_CONVERSATION,
+          ),
+        ]).then<String>((String selected) {
+      switch (selected) {
+        default:
+          print('当前选中的是：$selected');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget avater;
@@ -70,32 +98,46 @@ class _ConversationItem extends StatelessWidget {
       ));
     }
 
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-          color: Color(AppColors.ConversationItemBackgroundColor),
-          border: Border(
-              bottom: BorderSide(
-                  color: Color(AppColors.DividerColor),
-                  width: Constants.DividerWidth))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          avatarContainer,
-          Container(width: 10.0),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(conversation.title, style: AppStyles.TitleStyle),
-              Text(conversation.des, style: AppStyles.DesStyle),
-            ],
-          )),
-          Container(width: 10.0),
-          Column(children: _rightArea)
-        ],
-      ),
-    );
+    return Material(
+        color: Color(AppColors.ConversationItemBackgroundColor),
+        child: InkWell(
+          onTap: () {
+            print('点击事件');
+          },
+          onTapDown: (TapDownDetails details) {
+            tapPos = details.globalPosition;
+          },
+          onLongPress: () {
+            print('长按事件');
+            _showMenu(context, tapPos);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+//            color: Color(AppColors.ConversationItemBackgroundColor),
+                border: Border(
+                    bottom: BorderSide(
+                        color: Color(AppColors.DividerColor),
+                        width: Constants.DividerWidth))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                avatarContainer,
+                Container(width: 10.0),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(conversation.title, style: AppStyles.TitleStyle),
+                    Text(conversation.des, style: AppStyles.DesStyle),
+                  ],
+                )),
+                Container(width: 10.0),
+                Column(children: _rightArea)
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -149,7 +191,6 @@ class _DeviceInfoItem extends StatelessWidget {
 }
 
 class _ConversationPageState extends State<ConversationPage> {
-
   final ConversationPageData data = ConversationPageData.mock();
 
   @override
@@ -161,15 +202,14 @@ class _ConversationPageState extends State<ConversationPage> {
           if (index == 0) {
             return _DeviceInfoItem(deviece: data.device);
           }
-          return _ConversationItem(
-              conversation: mockConversations[index -1]);
+          return _ConversationItem(conversation: mockConversations[index - 1]);
         } else {
-          return _ConversationItem(
-              conversation: mockConversations[index]);
+          return _ConversationItem(conversation: mockConversations[index]);
         }
-
       },
-      itemCount: data.device != null ? mockConversations.length + 1 : mockConversations.length,
+      itemCount: data.device != null
+          ? mockConversations.length + 1
+          : mockConversations.length,
     );
   }
 }

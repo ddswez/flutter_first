@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'constants.dart' show Constants, AppColors;
+import 'constants.dart';
 import 'conversation_page.dart';
 import 'contacts_page.dart';
 import 'discover_page.dart';
 import 'package:flutter/services.dart';
+import 'functions_page.dart';
 
 enum ActionItems { GROUP_CHAT, QR_SACN, ADD_FRIEND, PAYMENT, HELP }
 
@@ -57,9 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ConversationPage(),
       ContactsPage(),
       DiscoverPage(),
-      Container(
-        color: Colors.red,
-      ),
+      FunctionsPage(),
     ];
   }
 
@@ -105,48 +104,58 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text("微信"),
+        backgroundColor: Colors.white,
+        title: Text("微信", style: AppStyles.TitleStyle),
         elevation: 0,
+        brightness: Brightness.light,
+
         actions: <Widget>[
           Container(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.search, color: Color(AppColors.ActionIconColor)),
               onPressed: () {
                 print('on click search');
               },
             ),
           ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuItem<ActionItems>>[
-                PopupMenuItem(
-                  child: _buildPopupMenuItem(0xe62f, '发起群聊'),
-                  value: ActionItems.GROUP_CHAT,
-                ),
-                PopupMenuItem(
-                  child: _buildPopupMenuItem(0xe61d, '添加朋友'),
-                  value: ActionItems.ADD_FRIEND,
-                ),
-                PopupMenuItem(
-                  child: _buildPopupMenuItem(0xe613, '扫一扫'),
-                  value: ActionItems.QR_SACN,
-                ),
-                PopupMenuItem(
-                  child: _buildPopupMenuItem(0xe64d, '收付款'),
-                  value: ActionItems.PAYMENT,
-                ),
-                PopupMenuItem(
-                  child: _buildPopupMenuItem(0xe6b3, '帮助与反馈'),
-                  value: ActionItems.HELP,
-                ),
-              ];
-            },
-            icon: Icon(Icons.add),
-            onSelected: (ActionItems selected) {
-              print('on click is $selected');
-            },
+
+          Theme(
+            data: ThemeData(
+              cardColor: Color(AppColors.ActionMenuBgColor)
+            ),
+            child: PopupMenuButton(
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuItem<ActionItems>>[
+                  PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe62f, '发起群聊'),
+                    value: ActionItems.GROUP_CHAT,
+                  ),
+                  PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe61d, '添加朋友'),
+                    value: ActionItems.ADD_FRIEND,
+                  ),
+                  PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe613, '扫一扫'),
+                    value: ActionItems.QR_SACN,
+                  ),
+                  PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe64d, '收付款'),
+                    value: ActionItems.PAYMENT,
+                  ),
+                  PopupMenuItem(
+                    child: _buildPopupMenuItem(0xe6b3, '帮助与反馈'),
+                    value: ActionItems.HELP,
+                  ),
+                ];
+              },
+              icon: Icon(Icons.add, color: Color(AppColors.ActionIconColor)),
+              onSelected: (ActionItems selected) {
+                print('on click is $selected');
+              },
+            ),
           ),
+
           // 右边距
           Container(
             width: 16.0,
