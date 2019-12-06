@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import '../model/conversation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class _ConversationItem extends StatelessWidget {
   _ConversationItem({Key key, this.conversation, this.tapPos});
@@ -28,11 +29,24 @@ class _ConversationItem extends StatelessWidget {
             child: Text(Constants.MENU_DELETE_CONVERSATION_VALUE),
             value: Constants.MENU_DELETE_CONVERSATION,
           ),
-        ]).then<String>((String selected) {
-      switch (selected) {
-        default:
-          print('当前选中的是：$selected');
-      }
+        ])
+        .then<String>((String selected) {
+      // ignore: missing_return
+            switch (selected) {
+              default:
+        //          print('当前选中的是：$selected');
+                Fluttertoast.showToast(
+                    // ignore: missing_return
+                    msg: '当前选中的是：$selected',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIos: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+            }
+            return "";
     });
   }
 

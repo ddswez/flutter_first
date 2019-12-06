@@ -9,6 +9,7 @@ void main() => runApp(MaterialApp(
     cardColor: Color(AppColors.CardBgColor),
   ),
   home: HomeScreen(),
+  debugShowCheckedModeBanner: false,
 )); //2
 
 
